@@ -36,12 +36,15 @@ telephone-sim/
 ## 快速开始
 
 1. 安装 JDK 21 与 Maven（3.9+ 建议）
-2. 在项目根目录执行构建：
-   - `mvn clean package`
-3. 运行入口类（默认打包不含可执行清单，使用类路径运行）：
-   - `java -cp target/telephone-1.0-SNAPSHOT.jar com.touhikari.telephone.core.Telephone`
-
-> 说明：当前代码以骨架为主，`main` 方法会初始化控制器，具体事件行为在后续迭代中完善。
+2. 运行（任选 A、B 其一）：
+   - 方式 A：可执行 Jar
+     - 在项目根目录执行构建：
+       `mvn clean package`
+     - 执行 Jar：
+       `java -jar target/telephone-1.0-SNAPSHOT.jar`
+   - 方式 B：仅编译并运行
+     - `mvn -q compile`
+     - `mvn -q exec:java`
 
 ## 架构与职责
 
