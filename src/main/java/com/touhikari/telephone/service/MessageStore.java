@@ -11,17 +11,17 @@ public class MessageStore {
 
     public MessageStore() {
         Message m1 = new Message();
-        m1.text = "您拨打的号码不存在，请检查后重试";
+        m1.text = "The number you dialed does not exist. Please check and try again.";
         m1.durationMs = 3000;
         store.put("404", m1);
 
         Message m2 = new Message();
-        m2.text = "您拨打的号码正在通话中，请稍后再拨";
+        m2.text = "The number you dialed is currently busy. Please call later.";
         m2.durationMs = 2500;
         store.put("500", m2);
 
         Message m3 = new Message();
-        m3.text = "该服务暂未开通";
+        m3.text = "The service is not available.";
         m3.durationMs = 2500;
         store.put("999", m3);
     }

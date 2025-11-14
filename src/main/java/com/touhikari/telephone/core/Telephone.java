@@ -90,7 +90,7 @@ public class Telephone {
             String[] parts = line.split("\\s+", 2);
             String cmd = parts[0].toLowerCase();
             if ("help".equals(cmd)) {
-                System.out.println("Commands: pickup, hangup, digit <0-9>, call <number>, status, timeout, exit");
+                System.out.println("Commands: pickup, hangup, digit <0-9>, call <number>, status, numbers, answer, remotehangup, timeout, exit");
                 continue;
             }
             if ("pickup".equals(cmd)) {
@@ -137,8 +137,33 @@ public class Telephone {
                 System.out.println("Ringing: " + controller.getAudio().isRinging());
                 System.out.println("Voice: " + controller.getAudio().isVoiceActive());
                 System.out.println("Info: " + controller.getAudio().isInfoPlaying());
+                if (controller.getAudio().isInfoPlaying() && controller.getAudio().getCurrentMessage() != null) {
+                    System.out.println("Message: " + controller.getAudio().getCurrentMessage().text + " (" + controller.getAudio().getCurrentMessage().durationMs + " ms)");
+                }
                 System.out.println("Number: " + number);
                 System.out.println("Connection: " + conn);
+                continue;
+            }
+            if ("numbers".equals(cmd)) {
+                System.out.println("Built-in numbers:");
+                System.out.println("111 -> immediate connect");
+                System.out.println("222 -> rings then connects after 3s");
+                System.out.println("555 -> busy");
+                System.out.println("404 -> info: not exist");
+                System.out.println("500 -> info: busy later");
+                System.out.println("999 -> info: service not available");
+                System.out.println("888xxx -> busy");
+                System.out.println("*00 -> busy");
+                continue;
+            }
+            if ("answer".equals(cmd)) {
+                controller.onAnswered();
+                System.out.println("Remote answered");
+                continue;
+            }
+            if ("remotehangup".equals(cmd)) {
+                controller.onRemoteHangUp();
+                System.out.println("Remote hung up");
                 continue;
             }
             if ("timeout".equals(cmd)) {

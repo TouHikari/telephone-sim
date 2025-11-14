@@ -6,6 +6,11 @@ public class NetworkSwitch {
         if (isBusy(number)) {
             return new Connection(null, ConnectionStatus.BUSY);
         }
+        if ("111".equals(number)) {
+            Endpoint remote = new Endpoint();
+            remote.answer();
+            return new Connection(remote, ConnectionStatus.CONNECTED);
+        }
         Endpoint remote = new Endpoint();
         remote.ring();
         return new Connection(remote, ConnectionStatus.TRYING);
@@ -13,7 +18,7 @@ public class NetworkSwitch {
 
     public boolean isBusy(String number) {
         return number == null || number.isEmpty() || "101".equals(number)
-                || "102".equals(number) || number.startsWith("888")
+                || "102".equals(number) || "555".equals(number) || number.startsWith("888")
                 || number.endsWith("00");
     }
 }
