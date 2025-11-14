@@ -15,15 +15,27 @@ public class Telephone {
     private MessageStore messageStore;
 
     public void pickUp() {
-
+        if (controller == null) {
+            controller = CallController.getInstance();
+        }
+        if (handset == null) {
+            handset = new Handset();
+        }
+        handset.lift();
     }
 
     public void hangUp() {
-
+        if (handset == null) {
+            handset = new Handset();
+        }
+        handset.replace();
     }
 
     public void inputDigit(char d) {
-
+        if (controller == null) {
+            controller = CallController.getInstance();
+        }
+        controller.onDigit(d);
     }
 
     public static void main(String[] args) {
