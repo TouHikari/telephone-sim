@@ -10,14 +10,14 @@ public class CallController {
     private String numberBuffer;
     private Timer timer;
 
-    private static final CallController instance = new CallController();
+    private static final CallController INSTANCE = new CallController();
 
     private CallController() {
         this.state = new IdleState();
     }
 
     public static CallController getInstance() {
-        return instance;
+        return INSTANCE;
     }
 
     public void setState(PhoneState s) {
