@@ -1,6 +1,11 @@
 package com.touhikari.telephone.network;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class NetworkSwitch {
+
+    private final Set<String> userBusy = new HashSet<>();
 
     public Connection connect(String number) {
         if (isBusy(number)) {
@@ -17,8 +22,24 @@ public class NetworkSwitch {
     }
 
     public boolean isBusy(String number) {
-        return number == null || number.isEmpty() || "101".equals(number)
+        return number == null || number.isEmpty() || userBusy.contains(number) || "101".equals(number)
                 || "102".equals(number) || "555".equals(number) || number.startsWith("888")
                 || number.endsWith("00");
+    }
+
+    public void addBusy(String number) {
+        if (number != null && !number.isEmpty()) {
+            userBusy.add(number);
+        }
+    }
+
+    public void removeBusy(String number) {
+        if (number != null) {
+            userBusy.remove(number);
+        }
+    }
+
+    public Set<String> getBusyNumbers() {
+        return userBusy;
     }
 }

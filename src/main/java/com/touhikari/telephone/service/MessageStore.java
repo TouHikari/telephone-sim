@@ -2,6 +2,7 @@ package com.touhikari.telephone.service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import com.touhikari.telephone.model.Message;
 
@@ -32,5 +33,20 @@ public class MessageStore {
 
     public Message getMessage(String number) {
         return store.get(number);
+    }
+
+    public void putMessage(String number, String text, int durationMs) {
+        Message m = new Message();
+        m.text = text;
+        m.durationMs = durationMs;
+        store.put(number, m);
+    }
+
+    public void removeMessage(String number) {
+        store.remove(number);
+    }
+
+    public Set<String> keys() {
+        return store.keySet();
     }
 }

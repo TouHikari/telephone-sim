@@ -1,9 +1,5 @@
 package com.touhikari.telephone.core;
 
-import com.touhikari.telephone.network.NetworkSwitch;
-import com.touhikari.telephone.service.AudioService;
-import com.touhikari.telephone.service.Dialer;
-import com.touhikari.telephone.service.MessageStore;
 import java.util.Scanner;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -13,10 +9,6 @@ public class Telephone {
 
     private Handset handset;
     private static CallController controller;
-    private AudioService audio;
-    private Dialer dialer;
-    private NetworkSwitch networkSwitch;
-    private MessageStore messageStore;
 
     public void pickUp() {
         if (controller == null) {
@@ -84,7 +76,7 @@ public class Telephone {
                 String[] parts = line.split("\\s+", 2);
                 String cmd = parts[0].toLowerCase();
                 if ("help".equals(cmd)) {
-                    System.out.println("Commands: pickup, hangup, digit <0-9>, call <number>, status, numbers, answer, remotehangup, timeout, exit");
+                    System.out.println("Commands: pickup, hangup, digit <0-9>, call <number>, status, numbers, addinfo <number> <durationMs> <text>, delinfo <number>, listinfo, busy <number>, free <number>, listbusy, answer, remotehangup, timeout, clear, exit");
                     continue;
                 }
                 if ("pickup".equals(cmd)) {
@@ -158,6 +150,78 @@ public class Telephone {
                 if ("remotehangup".equals(cmd)) {
                     controller.onRemoteHangUp();
                     System.out.println("Remote hung up");
+                    continue;
+                }
+                if ("addinfo".equals(cmd)) {
+                    if (parts.length < 2) {
+                        System.out.println("Usage: addinfo <number> <durationMs> <text>");
+                        continue;
+                    }
+                    String[] a = parts[1].split("\\s+", 3);
+                    if (a.length < 3) {
+                        System.out.println("Usage: addinfo <number> <durationMs> <text>");
+                        continue;
+                    }
+                    String num = a[0];
+                    int dur;
+                    try {
+                        dur = Integer.parseInt(a[1]);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Invalid duration");
+                        continue;
+                    }
+                    String text = a[2];
+                    controller.getMessageStore().putMessage(num, text, dur);
+                    System.out.println("Info added for " + num);
+                    continue;
+                }
+                if ("delinfo".equals(cmd)) {
+                    if (parts.length < 2) {
+                        System.out.println("Usage: delinfo <number>");
+                        continue;
+                    }
+                    String num = parts[1].trim();
+                    controller.getMessageStore().removeMessage(num);
+                    System.out.println("Info removed for " + num);
+                    continue;
+                }
+                if ("listinfo".equals(cmd)) {
+                    System.out.println("Info numbers:");
+                    for (String k : controller.getMessageStore().keys()) {
+                        System.out.println(k);
+                    }
+                    continue;
+                }
+                if ("busy".equals(cmd)) {
+                    if (parts.length < 2) {
+                        System.out.println("Usage: busy <number>");
+                        continue;
+                    }
+                    String num = parts[1].trim();
+                    controller.getNetworkSwitch().addBusy(num);
+                    System.out.println("Marked busy: " + num);
+                    continue;
+                }
+                if ("free".equals(cmd)) {
+                    if (parts.length < 2) {
+                        System.out.println("Usage: free <number>");
+                        continue;
+                    }
+                    String num = parts[1].trim();
+                    controller.getNetworkSwitch().removeBusy(num);
+                    System.out.println("Marked free: " + num);
+                    continue;
+                }
+                if ("listbusy".equals(cmd)) {
+                    System.out.println("Busy numbers:");
+                    for (String k : controller.getNetworkSwitch().getBusyNumbers()) {
+                        System.out.println(k);
+                    }
+                    continue;
+                }
+                if ("clear".equals(cmd)) {
+                    controller.getDialer().clear();
+                    System.out.println("Dialer cleared");
                     continue;
                 }
                 if ("timeout".equals(cmd)) {
