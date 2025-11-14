@@ -15,11 +15,11 @@ import com.touhikari.telephone.service.Timer;
 public class CallController {
 
     private PhoneState state;
-    private Timer timer;
-    private AudioService audio;
-    private Dialer dialer;
-    private NetworkSwitch networkSwitch;
-    private MessageStore messageStore;
+    private final Timer timer;
+    private final AudioService audio;
+    private final Dialer dialer;
+    private final NetworkSwitch networkSwitch;
+    private final MessageStore messageStore;
     private Connection connection;
 
     private static final CallController INSTANCE = new CallController();
@@ -66,10 +66,14 @@ public class CallController {
             return;
         }
         switch (c.status) {
-            case BUSY -> setState(new BusyToneState());
-            case CONNECTED -> setState(new TalkingState());
-            case DISCONNECTED -> setState(new DisconnectedState());
-            case TRYING -> setState(new RingingState());
+            case BUSY ->
+                setState(new BusyToneState());
+            case CONNECTED ->
+                setState(new TalkingState());
+            case DISCONNECTED ->
+                setState(new DisconnectedState());
+            case TRYING ->
+                setState(new RingingState());
         }
     }
 
