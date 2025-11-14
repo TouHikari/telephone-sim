@@ -8,6 +8,8 @@ public class BusyToneState implements PhoneState {
     @Override
     public void onEnter(CallController ctx) {
         ctx.getAudio().playBusyTone();
+        ctx.getTimer().reset();
+        ctx.getTimer().start();
     }
 
     @Override
@@ -30,7 +32,9 @@ public class BusyToneState implements PhoneState {
 
     @Override
     public void onTimeOut(CallController ctx) {
-        ctx.setState(new DisconnectedState());
+        if (ctx.getTimer().timeout(3000)) {
+            ctx.setState(new DisconnectedState());
+        }
     }
 
     @Override

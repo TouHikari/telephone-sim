@@ -36,7 +36,9 @@ public class DialToneState implements PhoneState {
 
     @Override
     public void onTimeOut(CallController ctx) {
-        ctx.setState(new TimeoutBeepState());
+        if (ctx.getTimer().timeout(5000)) {
+            ctx.setState(new TimeoutBeepState());
+        }
     }
 
     @Override

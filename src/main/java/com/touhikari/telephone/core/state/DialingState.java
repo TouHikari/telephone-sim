@@ -27,10 +27,15 @@ public class DialingState implements PhoneState {
     @Override
     public void onDigit(CallController ctx, char d) {
         ctx.getDialer().addDigit(d);
+        ctx.getTimer().reset();
+        ctx.getTimer().start();
     }
 
     @Override
     public void onTimeOut(CallController ctx) {
+        if (!ctx.getTimer().timeout(3000)) {
+            return;
+        }
         String number = ctx.getDialer().getNumber();
         boolean valid = ctx.getDialer().isValid(number);
         if (valid) {

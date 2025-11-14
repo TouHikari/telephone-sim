@@ -8,6 +8,8 @@ public class RingingState implements PhoneState {
     @Override
     public void onEnter(CallController ctx) {
         ctx.getAudio().startRinging();
+        ctx.getTimer().reset();
+        ctx.getTimer().start();
     }
 
     @Override
@@ -33,7 +35,9 @@ public class RingingState implements PhoneState {
 
     @Override
     public void onTimeOut(CallController ctx) {
-        ctx.setState(new TalkingState());
+        if (ctx.getTimer().timeout(3000)) {
+            ctx.setState(new TalkingState());
+        }
     }
 
     @Override

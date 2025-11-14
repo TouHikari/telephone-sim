@@ -34,7 +34,9 @@ public class TimeoutBeepState implements PhoneState {
 
     @Override
     public void onTimeOut(CallController ctx) {
-        ctx.setState(new IdleState());
+        if (ctx.getTimer().timeout(2000)) {
+            ctx.setState(new IdleState());
+        }
     }
 
     @Override

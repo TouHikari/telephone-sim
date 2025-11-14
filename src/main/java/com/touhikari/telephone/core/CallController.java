@@ -120,4 +120,8 @@ public class CallController {
     public void setConnection(Connection c) {
         this.connection = c;
     }
+
+    public String getStateName() {
+        return state.getClass().getSimpleName();
+    }
 }
