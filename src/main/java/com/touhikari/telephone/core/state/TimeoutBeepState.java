@@ -7,10 +7,14 @@ public class TimeoutBeepState implements PhoneState {
 
     @Override
     public void onEnter(CallController ctx) {
+        ctx.getAudio().playBeep();
+        ctx.getTimer().reset();
+        ctx.getTimer().start();
     }
 
     @Override
     public void onExit(CallController ctx) {
+        ctx.getAudio().stopBeep();
     }
 
     @Override
@@ -19,14 +23,18 @@ public class TimeoutBeepState implements PhoneState {
 
     @Override
     public void onHangUp(CallController ctx) {
+        ctx.setState(new DisconnectedState());
     }
 
     @Override
     public void onDigit(CallController ctx, char d) {
+        ctx.setState(new DialingState());
+        ctx.onDigit(d);
     }
 
     @Override
     public void onTimeOut(CallController ctx) {
+        ctx.setState(new IdleState());
     }
 
     @Override

@@ -46,6 +46,10 @@ public class AudioService {
         busyTonePlaying = true;
     }
 
+    public void stopBusyTone() {
+        stopBusyToneInternal();
+    }
+
     public void playBeep() {
         if (beepPlaying) {
             return;
@@ -56,6 +60,10 @@ public class AudioService {
         stopVoice();
         stopInfo();
         beepPlaying = true;
+    }
+
+    public void stopBeep() {
+        stopBeepInternal();
     }
 
     public void startRinging() {

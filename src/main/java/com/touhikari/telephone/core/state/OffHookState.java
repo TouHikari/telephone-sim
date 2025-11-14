@@ -7,6 +7,7 @@ public class OffHookState implements PhoneState {
 
     @Override
     public void onEnter(CallController ctx) {
+        ctx.setState(new DialToneState());
     }
 
     @Override
@@ -19,6 +20,7 @@ public class OffHookState implements PhoneState {
 
     @Override
     public void onHangUp(CallController ctx) {
+        ctx.setState(new DisconnectedState());
     }
 
     @Override

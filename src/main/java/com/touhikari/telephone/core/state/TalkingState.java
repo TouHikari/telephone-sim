@@ -7,10 +7,14 @@ public class TalkingState implements PhoneState {
 
     @Override
     public void onEnter(CallController ctx) {
+        if (ctx.getConnection() != null) {
+            ctx.getAudio().startVoice(ctx.getConnection());
+        }
     }
 
     @Override
     public void onExit(CallController ctx) {
+        ctx.getAudio().stopVoice();
     }
 
     @Override
@@ -19,6 +23,10 @@ public class TalkingState implements PhoneState {
 
     @Override
     public void onHangUp(CallController ctx) {
+        if (ctx.getConnection() != null) {
+            ctx.getConnection().disconnect();
+        }
+        ctx.setState(new DisconnectedState());
     }
 
     @Override

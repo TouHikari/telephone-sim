@@ -7,6 +7,8 @@ public class DialingState implements PhoneState {
 
     @Override
     public void onEnter(CallController ctx) {
+        ctx.getTimer().reset();
+        ctx.getTimer().start();
     }
 
     @Override
@@ -19,14 +21,27 @@ public class DialingState implements PhoneState {
 
     @Override
     public void onHangUp(CallController ctx) {
+        ctx.setState(new DisconnectedState());
     }
 
     @Override
     public void onDigit(CallController ctx, char d) {
+        ctx.getDialer().addDigit(d);
     }
 
     @Override
     public void onTimeOut(CallController ctx) {
+        String number = ctx.getDialer().getNumber();
+        boolean valid = ctx.getDialer().isValid(number);
+        if (valid) {
+            ctx.setState(new ConnectingState());
+            return;
+        }
+        if (ctx.getMessageStore().hasMessage(number)) {
+            ctx.setState(new PlayInfoState());
+            return;
+        }
+        ctx.setState(new TimeoutBeepState());
     }
 
     @Override

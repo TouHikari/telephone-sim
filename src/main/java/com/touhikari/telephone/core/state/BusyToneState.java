@@ -7,10 +7,12 @@ public class BusyToneState implements PhoneState {
 
     @Override
     public void onEnter(CallController ctx) {
+        ctx.getAudio().playBusyTone();
     }
 
     @Override
     public void onExit(CallController ctx) {
+        ctx.getAudio().stopBusyTone();
     }
 
     @Override
@@ -19,6 +21,7 @@ public class BusyToneState implements PhoneState {
 
     @Override
     public void onHangUp(CallController ctx) {
+        ctx.setState(new DisconnectedState());
     }
 
     @Override
@@ -27,6 +30,7 @@ public class BusyToneState implements PhoneState {
 
     @Override
     public void onTimeOut(CallController ctx) {
+        ctx.setState(new DisconnectedState());
     }
 
     @Override

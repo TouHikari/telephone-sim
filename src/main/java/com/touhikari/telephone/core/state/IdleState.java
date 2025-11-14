@@ -15,6 +15,7 @@ public class IdleState implements PhoneState {
 
     @Override
     public void onPickUp(CallController ctx) {
+        ctx.setState(new OffHookState());
     }
 
     @Override
